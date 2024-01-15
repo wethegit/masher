@@ -1,15 +1,15 @@
 import { Arguments } from "./types"
 
 export function getProcessArguments(args: string[]): Arguments {
-  const watching = args.includes("--watch")
-  const clearAllOuput = args.includes("--force-remash")
-  const forceRegisterRewrite = args.includes("--force-register")
-  const prettyRegister = args.includes("--pretty-register")
+  const watch = args.includes("--watch")
+  const clear = args.includes("--clear")
+  const force = args.includes("--force")
+  const help = args.includes("--help")
 
   return {
-    watching,
-    clearAllOuput,
-    forceRegisterRewrite,
-    prettyRegister,
+    watch,
+    clear,
+    force,
+    help,
   }
 }

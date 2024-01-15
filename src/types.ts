@@ -35,8 +35,8 @@ export interface QueueItem {
 export type Queue = QueueItem[]
 
 export interface Arguments {
-  watching: boolean
-  clearAllOuput: boolean
-  forceRegisterRewrite: boolean
-  prettyRegister: boolean
+  watch: boolean
+  clear: boolean
+  force: boolean
+  help: boolean
 }

@@ -17,14 +17,27 @@ import { processQueue } from "./process-queue.js"
 
 const root = await ensureCwd()
 
-const { clearAllOuput, watching, forceRegisterRewrite, prettyRegister } =
-  getProcessArguments(process.argv.slice(2))
+const args = getProcessArguments(process.argv.slice(2))
+
+if (args.help) {
+  console.log(`
+    Usage
+      $ @wethegit/masher [options]
+
+    Options
+      --clear, -c     Clear the cache and output
+      --watch, -w     Watch for changes
+      --force, -f     Force compression even if cached
+      --help, -h      Show this help
+  `)
+  process.exit(0)
+}
 
 const config = await buildAndParseConfig(root)
 
 const cache = loadCache(config)
 
-if (clearAllOuput) {
+if (args.clear) {
   try {
     rmdirSync(config.outputPath)
     saveCache({}, config)
@@ -33,10 +46,10 @@ if (clearAllOuput) {
 
 checkAll(cache, config)
 
-if (QUEUE.length === 0 && !watching) {
+if (QUEUE.length === 0 && !args.watch) {
   log(LOG_TYPE.message, "Nothing to mash.")
 
-  if (forceRegisterRewrite) saveRegister(cache, config, prettyRegister)
+  if (args.force) saveRegister(cache, config)
 
   process.exit(0)
 }
@@ -45,7 +58,7 @@ await processQueue(cache)
 
 saveCache(cache, config)
 
-if (watching) {
+if (args.watch) {
   watch(config.inputPath, { recursive: true }, function (evt: string, name: string) {
     if (QUEUE && !QUEUE.length) {
       /*

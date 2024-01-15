@@ -18,58 +18,52 @@ interface RegisterItem {
 
 type Register = Record<string, RegisterItem>
 
-export function saveRegister(
-  cache: Cache,
-  { useImageRegister, breakpoints }: Config,
-  prettyRegister?: boolean
-) {
+export function saveRegister(cache: Cache, { breakpoints }: Config) {
   const register: Register = {}
 
-  if (useImageRegister) {
-    Object.keys(cache).forEach((key) => {
-      const item = cache[key]
-      let shortPath = item.filename
+  Object.keys(cache).forEach((key) => {
+    const item = cache[key]
+    let shortPath = item.filename
 
-      let bp: string | null = null
+    let bp: string | null = null
 
-      for (let i = 0; i < breakpoints.length; i++) {
-        const _bp = breakpoints[i]
+    for (let i = 0; i < breakpoints.length; i++) {
+      const _bp = breakpoints[i]
 
-        if (shortPath.includes(_bp)) {
-          shortPath = shortPath.replace("-" + _bp, "")
-          bp = _bp
-          break
-        }
+      if (shortPath.includes(_bp)) {
+        shortPath = shortPath.replace("-" + _bp, "")
+        bp = _bp
+        break
+      }
+    }
+
+    if (!register[shortPath]) {
+      register[shortPath] = {
+        e: [...item.types].reverse(),
+        w: 0,
+        h: 0,
+      }
+    }
+
+    const ref = register[shortPath]
+
+    if (bp) {
+      if (!ref.b) ref.b = []
+      ref.b.push(bp)
+
+      const size: Size = {
+        w: item.size.width * (item.is2x ? 0.5 : 1),
+        h: item.size.height * (item.is2x ? 0.5 : 1),
       }
 
-      if (!register[shortPath]) {
-        register[shortPath] = {
-          e: [...item.types].reverse(),
-          w: 0,
-          h: 0,
-        }
-      }
+      if (!ref.s) ref.s = {}
 
-      const ref = register[shortPath]
+      ref.s[bp] = size
+    } else {
+      register[shortPath].w = item.size.width * (item.is2x ? 0.5 : 1)
+      register[shortPath].h = item.size.height * (item.is2x ? 0.5 : 1)
+    }
+  })
 
-      if (bp) {
-        if (!ref.b) ref.b = []
-        ref.b.push(bp)
-
-        const size: Size = {
-          w: item.size.width * (item.is2x ? 0.5 : 1),
-          h: item.size.height * (item.is2x ? 0.5 : 1),
-        }
-
-        if (!ref.s) ref.s = {}
-
-        ref.s[bp] = size
-      } else {
-        register[shortPath].w = item.size.width * (item.is2x ? 0.5 : 1)
-        register[shortPath].h = item.size.height * (item.is2x ? 0.5 : 1)
-      }
-    })
-  }
-
-  fse.writeJsonSync(IMAGES_REGISTER_FILE, register, prettyRegister ? { spaces: 2 } : {})
+  fse.writeJsonSync(IMAGES_REGISTER_FILE, register, { spaces: 2 })
 }
