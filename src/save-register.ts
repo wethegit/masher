@@ -1,7 +1,7 @@
 import fse from "fs-extra"
 
 import type { Cache, Config, OutputTypes } from "./types"
-import { IMAGES_REGISTER_FILE, PROCESS_TYPE } from "./const"
+import { IMAGES_REGISTER_FILE } from "./const"
 
 interface Size {
   w: number
@@ -30,51 +30,43 @@ export function saveRegister(
       const item = cache[key]
       let shortPath = item.filename
 
-      if (item.process === PROCESS_TYPE.defined) {
-        let bp: string | null = null
+      let bp: string | null = null
 
-        for (let i = 0; i < breakpoints.length; i++) {
-          const _bp = breakpoints[i]
+      for (let i = 0; i < breakpoints.length; i++) {
+        const _bp = breakpoints[i]
 
-          if (shortPath.includes(_bp)) {
-            shortPath = shortPath.replace("-" + _bp, "")
-            bp = _bp
-            break
-          }
+        if (shortPath.includes(_bp)) {
+          shortPath = shortPath.replace("-" + _bp, "")
+          bp = _bp
+          break
         }
+      }
 
-        if (!register[shortPath]) {
-          register[shortPath] = {
-            e: [...item.types].reverse(),
-            w: 0,
-            h: 0,
-          }
-        }
-
-        const ref = register[shortPath]
-
-        if (bp) {
-          if (!ref.b) ref.b = []
-          ref.b.push(bp)
-
-          const size: Size = {
-            w: item.size.width * (item.is2x ? 0.5 : 1),
-            h: item.size.height * (item.is2x ? 0.5 : 1),
-          }
-
-          if (!ref.s) ref.s = {}
-
-          ref.s[bp] = size
-        } else {
-          register[shortPath].w = item.size.width * (item.is2x ? 0.5 : 1)
-          register[shortPath].h = item.size.height * (item.is2x ? 0.5 : 1)
-        }
-      } else {
+      if (!register[shortPath]) {
         register[shortPath] = {
-          w: item.size.width,
-          h: item.size.height,
           e: [...item.types].reverse(),
+          w: 0,
+          h: 0,
         }
+      }
+
+      const ref = register[shortPath]
+
+      if (bp) {
+        if (!ref.b) ref.b = []
+        ref.b.push(bp)
+
+        const size: Size = {
+          w: item.size.width * (item.is2x ? 0.5 : 1),
+          h: item.size.height * (item.is2x ? 0.5 : 1),
+        }
+
+        if (!ref.s) ref.s = {}
+
+        ref.s[bp] = size
+      } else {
+        register[shortPath].w = item.size.width * (item.is2x ? 0.5 : 1)
+        register[shortPath].h = item.size.height * (item.is2x ? 0.5 : 1)
       }
     })
   }

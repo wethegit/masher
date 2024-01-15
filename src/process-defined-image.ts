@@ -2,7 +2,6 @@ import { join, resolve, relative } from "node:path"
 
 import type { Cache, CacheItem, Config, OutputTypes } from "./types"
 import { FileInfo } from "./get-file-info"
-import { PROCESS_TYPE } from "./const"
 import { addToQueue } from "./add-to-queue"
 
 export function processDefinedImage(
@@ -22,7 +21,6 @@ export function processDefinedImage(
     size: { width: width, height: height },
     count: 0,
     is2x: is2x,
-    process: PROCESS_TYPE.defined,
     types: outputTypes,
     generatedFiles: [],
   }
@@ -30,7 +28,7 @@ export function processDefinedImage(
   const add = (filename: string, width: number, height?: number) => {
     cacheItem.count += outputTypes.length
 
-    const rel = relative(PROCESS_TYPE.defined, relative(config.inputPath, path))
+    const rel = relative(config.inputPath, path)
 
     addToQueue({
       path: fullPath,

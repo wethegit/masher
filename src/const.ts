@@ -2,11 +2,6 @@ import type { Config, Queue } from "./types"
 
 export const QUEUE: Queue = []
 
-export enum PROCESS_TYPE {
-  auto = "auto",
-  defined = "defined",
-}
-
 export enum ACTION_TYPE {
   delete = "delete",
   compress = "compress",
@@ -21,7 +16,6 @@ export enum LOG_TYPE {
 }
 
 export const DEFAULT_CONFIG_VALUES: Config = {
-  imageSizeStepAmount: 300,
   useImageRegister: true,
   validTypes: ["png", "webp", "jpg", "jpeg"],
   outputPath: "public/_images/",

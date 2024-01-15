@@ -1,5 +1,3 @@
-import { PROCESS_TYPE } from "./const"
-
 export interface CacheItem {
   hash: string
   filename: string
@@ -9,7 +7,6 @@ export interface CacheItem {
   }
   count: number
   is2x?: boolean
-  process: PROCESS_TYPE
   types: OutputTypes[]
   generatedFiles: string[]
 }
@@ -20,7 +17,6 @@ export type OutputTypes = "png" | "jpg" | "jpeg" | "webp" | "avif"
 
 export interface Config {
   useImageRegister: boolean
-  imageSizeStepAmount: number
   validTypes: OutputTypes[]
   outputPath: string
   inputPath: string
