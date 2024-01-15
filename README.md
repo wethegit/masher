@@ -36,3 +36,9 @@ To watch for changes and automatically compress images run:
 ```bash
 npx @wethegit/masher --watch
 ```
+
+For a list of all available options run:
+
+```bash
+npx @wethegit/masher --help
+```
