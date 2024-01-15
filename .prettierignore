@@ -1,4 +1,5 @@
 .changeset/
+.github/
 .husky/
 .vscode/
 node_modules/
