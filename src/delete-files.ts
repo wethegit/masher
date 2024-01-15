@@ -1,15 +1,14 @@
 import fse from "fs-extra"
 
+import type { Cache } from "./types"
 import { removeFromQueue } from "./remove-from-queue"
-import type { Cache, Config, Queue } from "./types"
 import { log } from "./log"
 import { LOG_TYPE } from "./const"
-import { saveCache } from "./save-cache"
 
-export function deleteFiles(path: string, queue: Queue, cache: Cache, config: Config) {
+export function deleteFiles(path: string, cache: Cache) {
   if (cache[path]) {
     // remove tasks related to this path from the queue
-    removeFromQueue(path, queue)
+    removeFromQueue(path)
 
     const filesToDelete = cache[path]?.generatedFiles || []
 
@@ -19,7 +18,5 @@ export function deleteFiles(path: string, queue: Queue, cache: Cache, config: Co
     })
 
     delete cache[path]
-
-    saveCache(cache, config)
   }
 }

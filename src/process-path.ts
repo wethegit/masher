@@ -1,7 +1,7 @@
 import md5File from "md5-file"
 
-import type { Cache, Config, Queue } from "./types"
-import { ACTION_TYPE, FOLDERS, LOG_TYPE, PROCESS_TYPE } from "./const"
+import type { Cache, Config } from "./types"
+import { ACTION_TYPE, LOG_TYPE, PROCESS_TYPE } from "./const"
 import { deleteFiles } from "./delete-files"
 import { getFileInfo } from "./get-file-info"
 import { hasFileChanged } from "./has-file-changed"
@@ -14,13 +14,11 @@ export function processPath(
   path: string,
   action: ACTION_TYPE,
   config: Config,
-  cache: Cache,
-  queue: Queue
+  cache: Cache
 ) {
   const processType = path
-    .replace(FOLDERS.input, "")
-    ?.split("/")
-    ?.shift()
+    .replace(config.inputPath, "")
+    ?.split("/")[1]
     ?.trim() as PROCESS_TYPE
 
   if (!processType) return
@@ -43,6 +41,7 @@ export function processPath(
 
   switch (action) {
     case ACTION_TYPE.delete:
+      console.log("del", path, path.split("/").at(-1))
       const isDirectory = !path.slice(1, -1).includes(".")
 
       if (isDirectory) {
@@ -50,32 +49,31 @@ export function processPath(
         // files from the cache that were in that folder
         Object.keys(cache)
           .filter((p) => p.includes(path))
-          .forEach((p) => deleteFiles(p, queue, cache, config))
+          .forEach((p) => deleteFiles(p, cache))
       } else {
         if (cache[path]) {
-          deleteFiles(path, queue, cache, config)
+          deleteFiles(path, cache)
         } else {
           log(LOG_TYPE.message, `file ${path} was removed but not found in cache`)
         }
       }
       break
     case ACTION_TYPE.compress:
-      const fileInfo = getFileInfo(path, processType)
+      const fileInfo = getFileInfo(path)
 
       if (fileInfo) {
         const hash = md5File.sync(path)
+
         if (hasFileChanged(cache, path, hash)) {
-          log(LOG_TYPE.read, path)
+          console.log("changed", path, processType)
           switch (processType) {
             case PROCESS_TYPE.defined:
-              processDefinedImage(path, hash, fileInfo, queue, cache, config)
+              processDefinedImage(hash, fileInfo, cache, config)
               break
             case PROCESS_TYPE.auto:
-              processAutoImage(path, hash, fileInfo, queue, cache, config)
+              processAutoImage(hash, fileInfo, cache, config)
               break
           }
-        } else {
-          // log(LOG_TYPE.message, `file hasn't changed since last ${action}`)
         }
       }
       break

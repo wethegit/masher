@@ -1,5 +1,6 @@
-import type { Queue, QueueItem } from "./types"
+import type { QueueItem } from "./types"
+import { QUEUE } from "./const"
 
-export function addToQueue(queueItem: QueueItem, queue: Queue) {
-  return queue.concat([queueItem])
+export function addToQueue(queueItem: QueueItem) {
+  return QUEUE.push(queueItem)
 }

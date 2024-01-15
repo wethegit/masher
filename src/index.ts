@@ -1,39 +1,53 @@
-import fse from "fs-extra"
+import { resolve } from "node:path"
+import { rmdirSync } from "node:fs"
+
 import watch from "node-watch"
 
-import config from "./mash.config.js"
-
-import { FOLDERS, ACTION_TYPE, LOG_TYPE } from "./const.js"
-
-import { log } from "./log.js"
+import { ACTION_TYPE, LOG_TYPE, QUEUE } from "./const.js"
+import { checkAll } from "./check-all.js"
 import { getProcessArguments } from "./get-process-arguments.js"
-import { Cache, Queue } from "./types.js"
 import { saveCache } from "./save-cache.js"
 import { loadCache } from "./load-cache.js"
-import { checkAll } from "./check-all.js"
 import { processPath } from "./process-path.js"
+import { buildAndParseConfig } from "./build-and-parse-config.js"
+import { ensureCwd } from "./ensure-cwd.js"
+import { log } from "./log.js"
+import { saveRegister } from "./save-register.js"
+import { processQueue } from "./process-queue.js"
 
-const args = getProcessArguments(process.argv.slice(2))
+const root = await ensureCwd()
 
-let cache: Cache = {}
-let queue: Queue = []
+const { clearAllOuput, watching, forceRegisterRewrite, prettyRegister } =
+  getProcessArguments(process.argv.slice(2))
 
-if (args.clearAllOuput) {
+const config = await buildAndParseConfig(root)
+
+const cache = loadCache(config)
+
+if (clearAllOuput) {
   try {
-    fse.rmSync(FOLDERS.output, { recursive: true })
-    saveCache(cache, config)
-    log(LOG_TYPE.message, `${FOLDERS.output} is deleted!`)
-  } catch (err) {
-    log(LOG_TYPE.error, `Error while deleting ${FOLDERS.output}.`)
-  }
+    rmdirSync(config.outputPath)
+    saveCache({}, config)
+  } catch (_) {}
 }
 
-loadCache(config)
-checkAll(cache, config, queue, args)
+checkAll(cache, config)
 
-if (args.watching) {
-  watch(FOLDERS.input, { recursive: true }, function (evt: string, name: string) {
-    if (queue && !queue.length) {
+if (QUEUE.length === 0 && !watching) {
+  log(LOG_TYPE.message, "Nothing to mash.")
+
+  if (forceRegisterRewrite) saveRegister(cache, config, prettyRegister)
+
+  process.exit(0)
+}
+
+await processQueue(cache)
+
+saveCache(cache, config)
+
+if (watching) {
+  watch(config.inputPath, { recursive: true }, function (evt: string, name: string) {
+    if (QUEUE && !QUEUE.length) {
       /*
         if we're not currently processing anything in the
         queue we should load a fresh version of the cache.
@@ -44,10 +58,15 @@ if (args.watching) {
       loadCache(config)
     }
 
+    const path = resolve(".", name)
+
     if (evt === "remove") {
-      processPath("./" + name, ACTION_TYPE.delete, config, cache, queue)
+      processPath(path, ACTION_TYPE.delete, config, cache)
+      saveCache(cache, config)
     } else {
-      processPath("./" + name, ACTION_TYPE.compress, config, cache, queue)
+      processPath(path, ACTION_TYPE.compress, config, cache)
+      processQueue(cache)
+      saveCache(cache, config)
     }
   })
 }

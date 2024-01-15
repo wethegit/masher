@@ -1,9 +1,6 @@
-export const BREAKPOINTS = ["xxlarge-up", "xlarge-up", "large-up", "medium-up"] as const
+import type { Config, Queue } from "./types"
 
-export const FOLDERS = {
-  output: "public/_images/",
-  input: "src/images/",
-}
+export const QUEUE: Queue = []
 
 export enum PROCESS_TYPE {
   auto = "auto",
@@ -23,6 +20,15 @@ export enum LOG_TYPE {
   deleted = "deleted",
 }
 
+export const DEFAULT_CONFIG_VALUES: Config = {
+  imageSizeStepAmount: 300,
+  useImageRegister: true,
+  validTypes: ["png", "webp", "jpg", "jpeg"],
+  outputPath: "public/_images/",
+  inputPath: "src/images/",
+  breakpoints: ["xxlarge-up", "xlarge-up", "large-up", "medium-up"],
+}
+
 export const MASH_NAME = "masher"
 
 export const CACHE_NAME = "MashCache"
@@ -30,3 +36,5 @@ export const CACHE_NAME = "MashCache"
 export const CACHE_FILE = "./mash.cache.json"
 
 export const IMAGES_REGISTER_FILE = "./images_register.json"
+
+export const DEFAULT_CONFIG_FILE_NAME = "masher.config.json"

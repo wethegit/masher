@@ -1,7 +1,7 @@
 import fse from "fs-extra"
 
-import type { Breakpoint, Cache, Config, OutputTypes } from "./types"
-import { BREAKPOINTS, IMAGES_REGISTER_FILE, PROCESS_TYPE } from "./const"
+import type { Cache, Config, OutputTypes } from "./types"
+import { IMAGES_REGISTER_FILE, PROCESS_TYPE } from "./const"
 
 interface Size {
   w: number
@@ -10,8 +10,8 @@ interface Size {
 
 interface RegisterItem {
   e: OutputTypes[]
-  b?: Breakpoint[]
-  s?: Partial<Record<Breakpoint, Size>>
+  b?: string[]
+  s?: Partial<Record<string, Size>>
   w: number
   h: number
 }
@@ -20,21 +20,21 @@ type Register = Record<string, RegisterItem>
 
 export function saveRegister(
   cache: Cache,
-  { useImageRegister }: Config,
+  { useImageRegister, breakpoints }: Config,
   prettyRegister?: boolean
 ) {
-  let register: Register = {}
+  const register: Register = {}
 
   if (useImageRegister) {
     Object.keys(cache).forEach((key) => {
-      let item = cache[key]
+      const item = cache[key]
       let shortPath = item.filename
 
       if (item.process === PROCESS_TYPE.defined) {
-        let bp: Breakpoint | null = null
+        let bp: string | null = null
 
-        for (let i = 0; i < BREAKPOINTS.length; i++) {
-          const _bp = BREAKPOINTS[i]
+        for (let i = 0; i < breakpoints.length; i++) {
+          const _bp = breakpoints[i]
 
           if (shortPath.includes(_bp)) {
             shortPath = shortPath.replace("-" + _bp, "")
@@ -51,7 +51,7 @@ export function saveRegister(
           }
         }
 
-        let ref = register[shortPath]
+        const ref = register[shortPath]
 
         if (bp) {
           if (!ref.b) ref.b = []

@@ -1,7 +1,7 @@
 import fse from "fs-extra"
-import { CACHE_FILE, CACHE_NAME, LOG_TYPE } from "./const"
 
 import type { Cache, Config } from "./types"
+import { CACHE_FILE, CACHE_NAME, LOG_TYPE } from "./const"
 import { saveCache } from "./save-cache"
 import { log } from "./log"
 

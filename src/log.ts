@@ -1,9 +1,10 @@
-import chalk, { Chalk } from "chalk"
+import chalk from "chalk"
+import type { ChalkInstance } from "chalk"
 
 import { LOG_TYPE, MASH_NAME } from "./const"
 
 export function log(type: LOG_TYPE, message: string, extra?: string) {
-  const colorMap: Record<LOG_TYPE, Chalk> = {
+  const colorMap: Record<LOG_TYPE, ChalkInstance> = {
     [LOG_TYPE.read]: chalk.blue,
     [LOG_TYPE.write]: chalk.green,
     [LOG_TYPE.error]: chalk.red,

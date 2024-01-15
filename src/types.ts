@@ -1,8 +1,4 @@
-import { PROCESS_TYPE, BREAKPOINTS } from "./const"
-
-export type Breakpoints = typeof BREAKPOINTS
-
-export type Breakpoint = Breakpoints[number]
+import { PROCESS_TYPE } from "./const"
 
 export interface CacheItem {
   hash: string
@@ -26,6 +22,9 @@ export interface Config {
   useImageRegister: boolean
   imageSizeStepAmount: number
   validTypes: OutputTypes[]
+  outputPath: string
+  inputPath: string
+  breakpoints: string[]
 }
 
 export interface QueueItem {

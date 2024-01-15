@@ -1,7 +1,9 @@
+import { parse } from "node:path"
+
 import sizeOf from "image-size"
 
 import type { OutputTypes } from "./types"
-import { FOLDERS, LOG_TYPE, PROCESS_TYPE } from "./const"
+import { LOG_TYPE } from "./const"
 import { log } from "./log"
 
 export interface FileInfo {
@@ -14,7 +16,7 @@ export interface FileInfo {
   ratio: number
 }
 
-export function getFileInfo(path: string, processType: PROCESS_TYPE): FileInfo | null {
+export function getFileInfo(path: string): FileInfo | null {
   let width = null
   let height = null
   let type: OutputTypes | null = null
@@ -31,14 +33,16 @@ export function getFileInfo(path: string, processType: PROCESS_TYPE): FileInfo |
     return null
   }
 
+  const { name, dir } = parse(path)
+
   const is2x = path.includes("-x2") || path.includes("-2x") || path.includes("@2x")
-  const split = path.replace(FOLDERS.input + processType + "/", "").split("/")
-  const filename = split?.pop()?.split(".")[0].replace("-2x", "")!
-  const newPath = split.join("/") + "/"
+
+  const filename = name.replace("-2x", "")
+
   const ratio = width / height
 
   return {
-    path: newPath,
+    path: dir,
     filename,
     ext: type,
     width,
