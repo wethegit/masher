@@ -1,0 +1,11 @@
+.changeset/
+.github/
+.husky/
+.vscode/
+src/
+.eslintignore
+.eslintrc.cjs
+.prettierignore
+.prettierrc
+tsconfig.json
+tsup.config.ts
