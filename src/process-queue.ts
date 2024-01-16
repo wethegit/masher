@@ -22,8 +22,6 @@ export async function processQueue(cache: Cache) {
 
     if (!item) continue
 
-    console.log({ output: item.output, path: item.path })
-
     if (!fse.existsSync(item.output)) {
       fse.mkdirSync(item.output, { recursive: true })
     }
