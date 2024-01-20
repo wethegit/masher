@@ -8,6 +8,7 @@ import { log } from "./log"
 
 export interface FileInfo {
   path: string
+  originalPath: string
   filename: string
   ext: OutputTypes
   width: number
@@ -41,8 +42,11 @@ export function getFileInfo(path: string): FileInfo | null {
 
   const ratio = width / height
 
+  const originalPath = `${dir}/${name}.${type}`
+
   return {
     path: dir,
+    originalPath,
     filename,
     ext: type,
     width,
