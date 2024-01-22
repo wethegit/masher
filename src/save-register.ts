@@ -23,7 +23,7 @@ export function saveRegister(cache: Cache, { breakpoints }: Config) {
 
   Object.keys(cache).forEach((key) => {
     const item = cache[key]
-    let shortPath = item.filename
+    let shortPath = item.relativePath
 
     let bp: string | null = null
 
