@@ -1,6 +1,7 @@
 export interface CacheItem {
   hash: string
   filename: string
+  relativePath: string
   size: {
     width: number
     height: number
@@ -26,6 +27,7 @@ export interface Config {
 export interface QueueItem {
   path: string
   output: string
+  relativePath: string
   filename: string
   width: number
   height?: number

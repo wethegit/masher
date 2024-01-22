@@ -1,4 +1,4 @@
-import { resolve, relative } from "node:path"
+import { join, resolve, relative } from "node:path"
 
 import type { Cache, CacheItem, Config, OutputTypes } from "./types"
 import { FileInfo } from "./get-file-info"
@@ -13,6 +13,10 @@ export function processDefinedImage(
   const outputTypes: OutputTypes[] = [ext]
   const fullPath = originalPath
 
+  const rel = relative(config.inputPath, path)
+  const output = resolve(config.outputPath, rel)
+  const relativePath = join(rel, `${filename}.${ext}`)
+
   if (ext === "png") outputTypes.push("webp")
 
   const cacheItem: CacheItem = {
@@ -23,16 +27,24 @@ export function processDefinedImage(
     is2x: is2x,
     types: outputTypes,
     generatedFiles: [],
+    relativePath: relativePath,
   }
 
-  const add = (filename: string, width: number, height?: number) => {
+  const add = ({
+    filename,
+    width,
+    height,
+  }: {
+    filename: string
+    width: number
+    height?: number
+  }) => {
     cacheItem.count += outputTypes.length
-
-    const rel = relative(config.inputPath, path)
 
     addToQueue({
       path: fullPath,
-      output: resolve(config.outputPath, rel),
+      relativePath,
+      output,
       filename,
       width,
       height,
@@ -40,9 +52,9 @@ export function processDefinedImage(
     })
   }
 
-  add(filename + (is2x ? "-2x" : ""), width)
+  add({ filename: filename + (is2x ? "-2x" : ""), width })
 
-  if (is2x) add(filename, Math.ceil(width / 2), Math.ceil(height / 2))
+  if (is2x) add({ filename, width: Math.ceil(width / 2), height: Math.ceil(height / 2) })
 
   cache[fullPath] = cacheItem
 }
