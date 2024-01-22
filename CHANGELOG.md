@@ -1,5 +1,11 @@
 # @wethegit/masher
 
+## 1.0.2
+
+### Patch Changes
+
+- [#8](https://github.com/wethegit/masher/pull/8) [`0016231`](https://github.com/wethegit/masher/commit/0016231ddb7059650492393af8ac297dfb8f9337) Thanks [@marlonmarcello](https://github.com/marlonmarcello)! - fix: register path
+
 ## 1.0.1
 
 ### Patch Changes
