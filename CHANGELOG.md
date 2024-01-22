@@ -1,5 +1,11 @@
 # @wethegit/masher
 
+## 1.0.1
+
+### Patch Changes
+
+- [#6](https://github.com/wethegit/masher/pull/6) [`97e241c`](https://github.com/wethegit/masher/commit/97e241cbb61264746c5dde05f7943313320d53ce) Thanks [@andrewrubin](https://github.com/andrewrubin)! - Tweak -2x support
+
 ## 1.0.0
 
 ### Major Changes
