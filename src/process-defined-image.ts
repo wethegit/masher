@@ -1,4 +1,4 @@
-import { join, resolve, relative } from "node:path"
+import { resolve, relative } from "node:path"
 
 import type { Cache, CacheItem, Config, OutputTypes } from "./types"
 import { FileInfo } from "./get-file-info"
@@ -6,12 +6,12 @@ import { addToQueue } from "./add-to-queue"
 
 export function processDefinedImage(
   hash: string,
-  { ext, path, is2x, filename, width, height }: FileInfo,
+  { ext, path, originalPath, is2x, filename, width, height }: FileInfo,
   cache: Cache,
   config: Config
 ) {
   const outputTypes: OutputTypes[] = [ext]
-  const fullPath = join(path, filename + "." + ext)
+  const fullPath = originalPath
 
   if (ext === "png") outputTypes.push("webp")
 
