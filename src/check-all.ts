@@ -1,4 +1,4 @@
-import { join } from "node:path"
+import { join, resolve } from "node:path"
 
 import { glob } from "glob"
 
@@ -11,7 +11,7 @@ export function checkAll(cache: Cache, config: Config) {
 
   // check for files deleted while masher wasn't running
   Object.keys(cache).forEach((cacheFile) => {
-    if (!files.includes(cacheFile)) {
+    if (!files.includes(resolve(cacheFile))) {
       processPath(cacheFile, ACTION_TYPE.delete, config, cache)
     }
   })

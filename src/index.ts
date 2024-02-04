@@ -1,4 +1,3 @@
-import { resolve } from "node:path"
 import { rmdirSync } from "node:fs"
 
 import watch from "node-watch"
@@ -71,7 +70,7 @@ if (args.watch) {
       loadCache(config)
     }
 
-    const path = resolve(".", name)
+    const path = name
 
     if (evt === "remove") {
       processPath(path, ACTION_TYPE.delete, config, cache)
