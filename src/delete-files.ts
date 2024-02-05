@@ -1,3 +1,5 @@
+import { resolve } from "node:path"
+
 import fse from "fs-extra"
 
 import type { Cache } from "./types"
@@ -13,8 +15,16 @@ export function deleteFiles(path: string, cache: Cache) {
     const filesToDelete = cache[path]?.generatedFiles || []
 
     filesToDelete.forEach((d) => {
-      fse.remove(d)
-      log(LOG_TYPE.deleted, d)
+      d = resolve(d)
+      if (fse.existsSync(d)) {
+        fse.unlink(d)
+        log(LOG_TYPE.deleted, d)
+      } else {
+        log(
+          LOG_TYPE.error,
+          `Tried to delete ${d} but failed. It's probably nothing, but you might want to check.`
+        )
+      }
     })
 
     delete cache[path]

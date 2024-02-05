@@ -29,7 +29,11 @@ export function processPath(
         // files from the cache that were in that folder
         Object.keys(cache)
           .filter((p) => p.includes(path))
-          .forEach((p) => deleteFiles(p, cache))
+          .forEach((p) => {
+            console.log("directory")
+            console.log(p)
+            deleteFiles(p, cache)
+          })
       } else {
         if (cache[path]) {
           deleteFiles(path, cache)

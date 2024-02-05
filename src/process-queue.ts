@@ -1,5 +1,6 @@
-import { join } from "node:path"
+import { join, relative } from "node:path"
 import { log } from "console"
+import { cwd } from "node:process"
 
 import fse from "fs-extra"
 import sharp from "sharp"
@@ -55,7 +56,8 @@ export async function processQueue(cache: Cache) {
           break
       }
 
-      const path = newImagePath + "." + type
+      // const path = newImagePath + "." + type
+      const path = "./" + relative(cwd(), `${newImagePath}.${type}`)
 
       outputs.push(image.toFile(path))
       cache[item.path].generatedFiles.push(path)

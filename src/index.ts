@@ -1,5 +1,6 @@
-import { resolve } from "node:path"
 import { rmdirSync } from "node:fs"
+import { relative } from "node:path"
+import { cwd } from "node:process"
 
 import watch from "node-watch"
 
@@ -51,6 +52,8 @@ if (QUEUE.length === 0 && !args.watch) {
 
   if (args.force) saveRegister(cache, config)
 
+  saveCache(cache, config)
+
   process.exit(0)
 }
 
@@ -71,7 +74,7 @@ if (args.watch) {
       loadCache(config)
     }
 
-    const path = resolve(".", name)
+    const path = "./" + relative(cwd(), name)
 
     if (evt === "remove") {
       processPath(path, ACTION_TYPE.delete, config, cache)
