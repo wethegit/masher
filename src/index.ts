@@ -50,6 +50,8 @@ if (QUEUE.length === 0 && !args.watch) {
 
   if (args.force) saveRegister(cache, config)
 
+  saveCache(cache, config)
+
   process.exit(0)
 }
 
