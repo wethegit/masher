@@ -16,8 +16,15 @@ export function deleteFiles(path: string, cache: Cache) {
 
     filesToDelete.forEach((d) => {
       d = resolve(d)
-      fse.unlink(d)
-      log(LOG_TYPE.deleted, d)
+      if (fse.existsSync(d)) {
+        fse.unlink(d)
+        log(LOG_TYPE.deleted, d)
+      } else {
+        log(
+          LOG_TYPE.error,
+          `Tried to delete ${d} but failed. It's probably nothing, but you might want to check.`
+        )
+      }
     })
 
     delete cache[path]
