@@ -1,4 +1,6 @@
 import { rmdirSync } from "node:fs"
+import { relative } from "node:path"
+import { cwd } from "node:process"
 
 import watch from "node-watch"
 
@@ -72,7 +74,7 @@ if (args.watch) {
       loadCache(config)
     }
 
-    const path = name
+    const path = "./" + relative(cwd(), name)
 
     if (evt === "remove") {
       processPath(path, ACTION_TYPE.delete, config, cache)
