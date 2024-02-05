@@ -1,5 +1,11 @@
 # @wethegit/masher
 
+## 1.1.0
+
+### Minor Changes
+
+- [#13](https://github.com/wethegit/masher/pull/13) [`3b3fdba`](https://github.com/wethegit/masher/commit/3b3fdbae302208e2813974f6758ac197b229d2ab) Thanks [@liamegan](https://github.com/liamegan)! - Updating the file paths to be relative to the project root.
+
 ## 1.0.2
 
 ### Patch Changes
