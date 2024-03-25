@@ -1,3 +1,8 @@
+export interface Size {
+  w: number
+  h: number
+}
+
 export interface CacheItem {
   hash: string
   filename: string
@@ -42,3 +47,13 @@ export interface Arguments {
   force: boolean
   help: boolean
 }
+
+export interface RegisterItem {
+  e: OutputTypes[]
+  b?: string[]
+  s?: Partial<Record<string, Size>>
+  w: number
+  h: number
+}
+
+export type Register = Record<string, RegisterItem>

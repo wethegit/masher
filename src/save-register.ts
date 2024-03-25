@@ -1,22 +1,7 @@
 import fse from "fs-extra"
 
-import type { Cache, Config, OutputTypes } from "./types"
+import type { Cache, Config, Register, Size } from "./types"
 import { IMAGES_REGISTER_FILE } from "./const"
-
-interface Size {
-  w: number
-  h: number
-}
-
-export interface RegisterItem {
-  e: OutputTypes[]
-  b?: string[]
-  s?: Partial<Record<string, Size>>
-  w: number
-  h: number
-}
-
-export type Register = Record<string, RegisterItem>
 
 export function saveRegister(cache: Cache, { breakpoints }: Config) {
   const register: Register = {}
