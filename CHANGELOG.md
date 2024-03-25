@@ -1,5 +1,11 @@
 # @wethegit/masher
 
+## 1.1.2
+
+### Patch Changes
+
+- [#19](https://github.com/wethegit/masher/pull/19) [`51523a6`](https://github.com/wethegit/masher/commit/51523a6ee651e2125d089858cf6d6651fa557a13) Thanks [@marlonmarcello](https://github.com/marlonmarcello)! - fix: export types from root
+
 ## 1.1.1
 
 ### Patch Changes
