@@ -1,5 +1,11 @@
 # @wethegit/masher
 
+## 1.1.1
+
+### Patch Changes
+
+- [#17](https://github.com/wethegit/masher/pull/17) [`ebe81b2`](https://github.com/wethegit/masher/commit/ebe81b242fb492636bb6217dabcecccc4d95877c) Thanks [@marlonmarcello](https://github.com/marlonmarcello)! - hotfix: exports register types
+
 ## 1.1.0
 
 ### Minor Changes
