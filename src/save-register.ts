@@ -8,7 +8,7 @@ interface Size {
   h: number
 }
 
-interface RegisterItem {
+export interface RegisterItem {
   e: OutputTypes[]
   b?: string[]
   s?: Partial<Record<string, Size>>
@@ -16,7 +16,7 @@ interface RegisterItem {
   h: number
 }
 
-type Register = Record<string, RegisterItem>
+export type Register = Record<string, RegisterItem>
 
 export function saveRegister(cache: Cache, { breakpoints }: Config) {
   const register: Register = {}
