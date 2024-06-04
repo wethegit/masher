@@ -9,14 +9,14 @@
   "bin": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "prepare": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\"",
     "changeset": "changeset",
     "version": "changeset version",
     "release": "npm run build && changeset publish",
     "start": "tsup --watch",
     "build": "rm -rf dist && tsup",
     "lint": "eslint src/ --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@types/fs-extra": "~11.0.4",
